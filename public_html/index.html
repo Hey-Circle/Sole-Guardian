@@ -13,7 +13,7 @@ and open the template in the editor.
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
-    <body ng-controller="ResourceController as resource">
+    <body id="outer" ng-controller="ResourceController as resource">
         <div class="container">
             <div class="page-header">
                 <h1>
@@ -29,7 +29,7 @@ and open the template in the editor.
                 </div>
                 <div class="col-md-4" ng-include="'./partials/work.html'">
                 </div>
-                <div class="col-md-4" ng-controller="TestController as test">
+                <div class="col-md-4">
                     Salary : {{salary | currency}}
                 </div>
             </div>
