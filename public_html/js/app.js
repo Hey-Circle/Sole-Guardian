@@ -84,10 +84,6 @@
             this.elapsedHours = function(hours){
                 var timeElapsed = hours * 60 * 60 * 1000;
                 endTime = $scope.dateTime + timeElapsed;
-
-                $scope.workingShiftLength = hours;
-
-
                 $scope.working = true;
                 timeRate = 1000000;
             }
@@ -144,7 +140,10 @@
                     }
                     if($scope.working && endTime < $scope.dateTime){
                         $scope.working  = false;
-                        addToDueEarnings();
+                        if($scope.workingShiftLength > 0) {
+                            addToDueEarnings();
+                            $scope.workingShiftLength = 0;
+                        }
                         timeRate = 50;
                     }
                     $scope.dateTime += timeRate;
