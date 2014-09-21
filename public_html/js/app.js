@@ -180,7 +180,7 @@
                         $scope.msgs.push(msg);
                     }
                     else {
-                        var msg = {message:"You were " + minDifference + " minutes late to pick up your child.", type:"alert"};
+                        var msg = {message:"You were " + minDifference + " minutes late to pick up your child.", type:"warning"};
                         $scope.msgs.push(msg);
                         $scope.childRelationship -= ((minDifference / 60) * .1);
                     }
@@ -370,7 +370,7 @@
                         timeRate = 50;
                     }
                     $scope.dateTime += timeRate;
-                    if ($scope.msgs.length > 14) {
+                    if ($scope.msgs.length > 12) {
                         $scope.msgs.shift()
                     }
 
@@ -437,7 +437,7 @@
             //for styling notifications
             this.messageStyle = function(divisor, type) {
                 var opLevel = "" + (4.0 / divisor);
-                var myColor = '#ffffff';
+                var myColor = '#362F2D';
                 if(type === 'alert'){
                     myColor = '#fb0909';
                 }
