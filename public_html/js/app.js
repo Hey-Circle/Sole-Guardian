@@ -9,12 +9,24 @@
             var endTime = 0;
             $scope.working = false;
 
+            $scope.money = 1000;
+            $scope.location = 0;
+
+
             this.workTime = function(timeElapsed) {
                 endTime = $scope.dateTime + timeElapsed;
                 timeRate = 100000;
                 $scope.working = true;
                 
             };
+            
+            this.changeLocation = function(newLocation) {
+                $scope.location = newLocation;
+            }
+            
+            this.isLocation = function(testLocation) {
+                return testLocation === $scope.location;
+            }
 
             function step() {
                 $scope.$apply(function() {
