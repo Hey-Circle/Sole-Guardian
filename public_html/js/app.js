@@ -25,6 +25,8 @@
             }
         };
     });
+    
+
 
     app.filter('pantryFilter', function() {
         return function(items) {
@@ -71,8 +73,8 @@
             //Used for timekeeping
             var endTime = 0;
 
-   //Character working on a task i.e. travel, shopping, work, sleeping
-   //flag variables
+            //Character working on a task i.e. travel, shopping, work, sleeping
+            //flag variables
             $scope.working = false;
             //Character is sleeping
             $scope.sleeping = false;
@@ -84,7 +86,7 @@
 
             $scope.rent = 1000;
             $scope.rentDueDate = new Date(1988, 9, 6, 20, 0);
-            
+
             var timeElapsed = 0;
             var second = 1000;
             var minute = 60 * second;
@@ -98,10 +100,12 @@
             this.playWithChild = function() {
                 this.elapsedHours(1);
                 if ($scope.childRelationship >= 5) {
-                    $scope.msgs.push("You played with your child for an hour. She seems more happy and content");
+                    var msg = {message:"You played with your child for an hour. She seems more happy and content", type:"notification"};
+                    $scope.msgs.push(msg);
                 }
                 else if ($scope.childRelationship < 5) {
-                    $scope.msgs.push("You played with your child for an hour. She seems less detached");
+                    var msg = {message:"You played with your child for an hour. She seems less detached", type:"notification"};
+                    $scope.msgs.push(msg);
                 }
 
 
@@ -117,7 +121,8 @@
                 if (minutes === 10) {
                     $scope.childHealth -= .05;
                     $scope.money -= 10;
-                    $scope.msgs.push("You just ate fast food with your child.");
+                    var msg = {message:"You just ate fast food with your child.", type:"warning"};
+                    $scope.msgs.push(msg);
 
                 }
                 if (minutes === 60) {
@@ -125,12 +130,14 @@
                     $scope.stamina -= 1;
                     $scope.childRelationship += 0.1;
                     $scope.groceries = 0;
-                    $scope.msgs.push("You just prepared and ate a nutritious home-cooked meal with your child.");
+                    var msg = {message:"You just prepared and ate a nutritious home-cooked meal with your child.", type:"notification"};
+                    $scope.msgs.push(msg);
                 }
                 if (minutes === 90) {
                     $scope.childHealth += .03;
                     $scope.money -= 50;
-                    $scope.msgs.push("You just ate a nutritious meal at a gourmet restaurant with your child.");
+                    var msg = {message:"You just ate a nutritious meal at a gourmet restaurant with your child.", type:"notification"};
+                    $scope.msgs.push(msg);
                 }
             }
             //Time to shop for groceries
@@ -139,12 +146,14 @@
                 $scope.groceries = 1;
                 $scope.money -= 15;
                 $scope.stamina -= .5;
-                $scope.msgs.push("You just went shopping for groceries. Your pantry is stocked to make a meal");
+                var msg = {message:"You just went shopping for groceries. Your pantry is stocked to make a meal", type:"notification"};
+                $scope.msgs.push(msg);
             }
 
             this.homeTravelFromFood = function() {
                 this.elapsedMinutes(10);
-                $scope.msgs.push("You have traveled for " + 10 + " minutes.");
+                var msg = {message:"You have traveled for " + 10 + " minutes.", type:"notification"};
+                $scope.msgs.push(msg);
                 this.changeLocation(0);
             }
 
@@ -153,32 +162,71 @@
                 var pickupTime = $scope.dateTime;
                 pickupTime = new Date(pickupTime);
                 var minDifference = ((pickupTime.getHours() * 60) + pickupTime.getMinutes()) - ((16 * 60) + 30);
-                this.elapsedMinutes(30);
-                $scope.msgs.push("You have traveled for " + 30 + " minutes.");
-                if (minDifference <= 0) {
-                    $scope.msgs.push("You picked your child on time.");
+                var rand = Math.floor((Math.random() * 100) + 1);
+                if ($scope.stamina < 1) {
+                    testNum = 15;
+                } else {
+                    testNum = 1 * (10 / $scope.stamina);
+                }
+                if (rand < testNum) {
+                    this.collision();
                 }
                 else {
-                    $scope.msgs.push("You were " + minDifference + " minutes late to pick up your child.");
-                    $scope.childRelationship -= ((minDifference / 60) * .1);
+                    this.elapsedMinutes(30);
+                    var msg = {message:"You have traveled for " + 30 + " minutes.", type:"notification"};
+                    $scope.msgs.push(msg);
+                    if (minDifference <= 0) {
+                        var msg = {message:"You picked your child on time.", type:"warning"};
+                        $scope.msgs.push(msg);
+                    }
+                    else {
+                        var msg = {message:"You were " + minDifference + " minutes late to pick up your child.", type:"alert"};
+                        $scope.msgs.push(msg);
+                        $scope.childRelationship -= ((minDifference / 60) * .1);
+                    }
                 }
                 this.changeLocation(0);
             }
 
             //Travel timem to go to Work
             this.workTravel = function() {
-                this.elapsedMinutes(30);
-                $scope.msgs.push("You have traveled for " + 30 + " minutes.");
-                this.changeLocation(1);
-                $scope.wentToWork = true;
-                
-                //Child eats breakfast at school
-                $scope.childHunger = 0;
+                var rand = Math.floor((Math.random() * 100) + 1);
+                if ($scope.stamina < 1) {
+                    testNum = 15;
+                } else {
+                    testNum = 1 * (10 / $scope.stamina);
+                }
+                if (rand < testNum) {
+                    this.collision();
+                }
+                else {
+                    this.elapsedMinutes(30);
+                    var msg = {message:"You have traveled for " + 30 + " minutes.", type:"notification"};
+                    $scope.msgs.push(msg);
+                    this.changeLocation(1);
+                    $scope.wentToWork = true;
+
+                    //Child eats breakfast at school
+                    $scope.childHunger = 0;
+                }
+            }
+
+            this.collision = function() {
+                var repairFee = Math.floor((Math.random() * 400) + 100);
+                var alertMessage = "You have been in an accident due to fatigue. You must stay with the mechanic for\n\
+                        the next 6 hours. You must pay a repair fee of $" + repairFee;
+                var msg = {message:alertMessage, type:"alert"};
+                $scope.msgs.push(msg);
+                $scope.money -= repairFee;
+                this.elapsedHours(6);
+
+
             }
 
             this.foodTravel = function() {
                 this.elapsedMinutes(10);
-                $scope.msgs.push("You have traveled for " + 10 + " minutes.");
+                var msg = {message:"You have traveled for " + 10 + " minutes.", type:"notification"};
+                $scope.msgs.push(msg);
                 this.changeLocation(2);
             }
 
@@ -187,7 +235,8 @@
                 this.elapsedHours(hours);
                 $scope.stamina = $scope.stamina - (hours * .8);
                 $scope.workingShiftLength = hours;
-                $scope.msgs.push("You have worked for " + hours + " hours.");
+                var msg = {message:"You have worked for " + hours + " hours.", type:"notification"};
+                $scope.msgs.push(msg);
 
             };
 
@@ -210,8 +259,9 @@
                     $scope.childRelationship -= 0.3;
                 }
 
-                if ($scope.childHunger > 6){
-                    $scope.msgs.push("Your child went to sleep hungry today.")
+                if ($scope.childHunger > 6) {
+                    var msg = {message:"Your child went to sleep hungry today.", type:"alert"};
+                    $scope.msgs.push(msg);
                 }
                 playedWith = false;
                 $scope.wentToWork = false;
@@ -249,17 +299,18 @@
                     $scope.biWeeklyAccumulation = $scope.biWeeklyAccumulation + 8 * $scope.wages + 4 * $scope.wages * 1.5;
                 }
             };
-            
+
             //controls waking up
             $scope.wakeUp = function() {
-                var timeSlept = Math.round((new Date($scope.dateTime).getTime() - $scope.bedTime)/(1000*60*60));
-                $scope.msgs.push("You slept " + timeSlept + " hours.");
+                var timeSlept = Math.round((new Date($scope.dateTime).getTime() - $scope.bedTime) / (1000 * 60 * 60));
+                var msg = {message:"You slept " + timeSlept + " hours.", type:"notification"};
+                $scope.msgs.push(msg);
                 if (timeSlept > 6) {
                     $scope.stamina = 10;
                 }
                 else {
-                    $scope.stamina += timeSlept/2;
-                    if($scope.stamina > 10) {
+                    $scope.stamina += timeSlept / 2;
+                    if ($scope.stamina > 10) {
                         $scope.stamina = 10;
                     }
                 }
@@ -273,11 +324,12 @@
             function step() {
                 $scope.$apply(function() {
                     // 1% chance of child waking you
-                    var rand = Math.floor((Math.random() * $scope.childRelationship*50) + 1);
+                    var rand = Math.floor((Math.random() * $scope.childRelationship * 50) + 1);
                     if (rand === 1) {
-                        if($scope.sleeping) {
-                            if($scope.childRelationship < 4.5) {
-                                $scope.msgs.push("Your child is lonely and woke you for comfort.");
+                        if ($scope.sleeping) {
+                            if ($scope.childRelationship < 4.5) {
+                                var msg = {message:"Your child is lonely and woke you for comfort.", type:"warning"};
+                                $scope.msgs.push(msg);
                                 $scope.wakeUp();
                                 $scope.working = false;
                                 timeRate = 50;
@@ -287,14 +339,16 @@
                     //check if you reach payday
                     if ($scope.dateTime >= $scope.nextPayDate) {
                         $scope.money += $scope.biWeeklyAccumulation;
-                        $scope.msgs.push("You have been paid $" + $scope.biWeeklyAccumulation);
+                        var msg = {message:"You have been paid $" + $scope.biWeeklyAccumulation, type:"warning"};
+                        $scope.msgs.push(msg);
                         $scope.biWeeklyAccumulation = 0;
                         $scope.nextPayDate += 14 * 24 * 60 * 60 * 1000;
                     }
                     //check if you reach rent paytime
                     if ($scope.dateTime >= $scope.rentDueDate) {
                         $scope.money -= $scope.rent;
-                        $scope.msgs.push("You just paid your rent for this month.");
+                        var msg = {message:"You just paid your rent for this month.", type:"warning"};
+                        $scope.msgs.push(msg);
                         //set new rent due date
                         var rentDueMonth = (new Date($scope.dateTime).getMonth()) % 12 + 1;
                         var rentDueYear = (new Date($scope.dateTime).getFullYear());
@@ -310,7 +364,7 @@
                             $scope.workingShiftLength = 0;
                         }
                         if ($scope.sleeping) {
-                            
+
                             $scope.wakeUp();
                         }
                         timeRate = 50;
@@ -344,22 +398,22 @@
                     //Track increases hunger per hour
                     //Can be expanding to track anything per hour
                     if (currDate.getHours() > 14 && !$scope.sleeping) {
-                        console.log("Current Time past 2");
-                        console.log("Time Elapsed " + timeElapsed);
-                        console.log(hour);
                         if (timeElapsed >= hour) {
                             $scope.childHunger += 1;
                             timeElapsed -= hour;
                             if ($scope.chilHunger > 9) {
-                                $scope.msgs.push("Your child is suffering from starvation");
+                                var msg = {message:"Your child is suffering from starvation.", type:"alert"};
+                                $scope.msgs.push(msg);
                                 $scope.childRelationship -= 2;
                             }
                             else if ($scope.childHunger > 6) {
-                                $scope.msgs.push("Your child is starving");
+                                var msg = {message:"Your child is starving.", type:"warning"};
+                                $scope.msgs.push(msg);
                                 $scope.childRelationship -= 0.7;
                             }
                             else if ($scope.childHunger > 3) {
-                                $scope.msgs.push("Your child is getting hungry");
+                                var msg = {message:"Your child is getting hungry.", type:"notification"};
+                                $scope.msgs.push(msg);
                             }
                         }
                         //Counter to keep track of time elapsed to be used
@@ -372,6 +426,7 @@
                     }
                     if($scope.childRelationship < 0){
                         if(!alert('Game Over! Your child was removed by protective services for parent negligence. Press OK to restart.')){window.location.reload();}
+
                     }
 
                 });
@@ -380,9 +435,19 @@
             var timer = setInterval(step, 20);
 
             //for styling notifications
-            this.setOpacity = function(divisor) {
+            this.messageStyle = function(divisor, type) {
                 var opLevel = "" + (4.0 / divisor);
-                return {opacity: opLevel};
+                var myColor = '#ffffff';
+                if(type === 'alert'){
+                    myColor = '#fb0909';
+                }
+                else if(type === 'warning'){
+                    myColor = '#fdff00';
+                }
+                return {
+                    opacity: opLevel,
+                    color : myColor
+                };
             }
 
             //Style for backgroud image
