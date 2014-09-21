@@ -3,6 +3,10 @@
     <button type="button" class="btn btn-default" ng-disabled="working" ng-click="resource.sleepTime()">Go To Sleep</button>
     <button type="button" class="btn btn-default" ng-disabled="working || stamina < 0" ng-click="resource.playWithChild()">Play With Child</button> 
     <br />
+    <h4>Eat</h4>
+    <button type="button" class="btn btn-default" ng-disabled="working" ng-click="resource.foodTravel()">Go To Food Court / Grocery</button>
+    <button type="button" class="btn btn-default" ng-disabled="working || stamina < 0 || groceries < 1" ng-click="resource.eatTime(60)">Prepare and Eat Food at Home</button>
+    <br />
     <h4>Travel</h4>
     <button type="button" class="btn btn-default" ng-disabled="working" ng-click="resource.workTravel()">Go To Work</button>
 </div>

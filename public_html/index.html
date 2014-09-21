@@ -31,6 +31,7 @@ and open the template in the editor.
                         </div>
                     </div>
                 </div>
+                <div class="col-md-4" ng-show="resource.isLocation(2)" ng-include="'./partials/eat.html'"></div>
                 <div class="col-md-4" ng-show="resource.isLocation(1)" ng-include="'./partials/work.html'"></div>
                 <div class="col-md-4" ng-show="resource.isLocation(0)" ng-include="'./partials/home.html'"></div>
                 <div class="col-md-4">
@@ -49,6 +50,9 @@ and open the template in the editor.
                     </div>
                     <div class='row'>
                         Next paycheck on {{nextPayDate | date:'shortDate'}}: {{biWeeklyAccumulation | currency}}
+                    </div>
+                    <div class="row">
+                        Pantry: {{groceries | pantryFilter}}
                     </div>
                     
                     <div class="row">

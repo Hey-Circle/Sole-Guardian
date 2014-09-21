@@ -26,6 +26,17 @@
         };
     });
     
+    app.filter('pantryFilter', function() {
+        return function(items) {
+            if(items > 0){
+                return "Stocked";
+            }
+            else {
+                return "Empty";
+            }
+        };
+    });
+
     app.controller('ResourceController', ['$scope', function($scope) {
             //Player Stats
             $scope.salary = 1000;
@@ -41,9 +52,11 @@
             $scope.childAge = 5;
             $scope.childRelationship = 5;
             $scope.childHunger = 3;
-            $scope.childHeatlh = 7;
+            $scope.childHealth = 7;
             var playedWith = false;
             
+            //Groceries available to cook (1 is stocked, 0 is no stock)
+            $scope.groceries = 0;
             
             //Notifications
             $scope.msgs = [];
@@ -65,7 +78,7 @@
             $scope.nextPayDate = $scope.dateTime + 14*24*60*60*1000;
             
             $scope.rent = 1000;
-            $scope.rentDueDate = new Date(1993, 9, 6, 20, 0);
+            $scope.rentDueDate = new Date(1988, 9, 6, 20, 0);
 
 
             //Play with child
@@ -83,8 +96,45 @@
                 $scope.stamina -= 1;
                 playedWithed = true;
             }
+            //Time to eat
+            this.eatTime = function(minutes) {
+                this.elapsedMinutes(minutes);
+                $scope.childHunger = 0;
+                if (minutes === 10) {
+                    $scope.childHealth -= .05;
+                    $scope.money -= 10;
+                    $scope.msgs.push("You just ate fast food with your child.");
+                    
+                }
+                if (minutes === 60) {
+                    $scope.childHealth += .02;
+                    $scope.stamina -= 1;
+                    $scope.childRelationship += 0.1;
+                    $scope.groceries = 0;
+                    $scope.msgs.push("You just prepared and ate a nutritious home-cooked meal with your child.");
+                }
+                if (minutes === 90) {
+                    $scope.childHealth += .03;
+                    $scope.money -= 50;
+                    $scope.msgs.push("You just ate a nutritious meal at a gourmet restaurant with your child.");
+                }
+            }
+            //Time to shop for groceries
+            this.shopTime = function(minutes) {
+                this.elapsedMinutes(minutes);
+                $scope.groceries = 1;
+                $scope.money -= 15;
+                $scope.stamina -= .5;
+                $scope.msgs.push("You just went shopping for groceries. Your pantry is stocked to make a meal");
+            }
             
-            //Travel time to go Home
+            this.homeTravelFromFood = function() {
+                this.elapsedMinutes(10);
+                $scope.msgs.push("You have traveled for " + 10 + " minutes.");
+                this.changeLocation(0);
+            }
+            
+            //Travel time to go Home from work (pick up kid on the way)
             this.homeTravel = function(){
                 var pickupTime = $scope.dateTime;
                 pickupTime = new Date(pickupTime);
@@ -109,6 +159,12 @@
                 this.elapsedMinutes(30);
                 $scope.msgs.push("You have traveled for " + 30 + " minutes.");
                 this.changeLocation(1);
+            }
+            
+            this.foodTravel = function() {
+                this.elapsedMinutes(10);
+                $scope.msgs.push("You have traveled for " + 10 + " minutes.");
+                this.changeLocation(2);
             }
             
             //Time spent working
@@ -225,7 +281,7 @@
             }
 
             var timer = setInterval(step, 20);
-
+            //for styling notifications
             this.setOpacity = function(divisor){
                 var opLevel = "" + (4.0/divisor);
                 return {opacity : opLevel};
