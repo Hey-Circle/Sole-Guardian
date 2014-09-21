@@ -7,36 +7,98 @@
         };
     });
     app.controller('ResourceController', ['$scope', function($scope) {
+            //Player Stats
             $scope.salary = 1000;
+            $scope.money = 1000;
+            $scope.health = 0;
+            $scope.location = 0;
+            $scope.wages = 7.25;
+            $scope.biWeeklyAccumulation = 0;
+            
+            //Notifications
             $scope.msgs = [];
 
+            //September 25, 1993
             $scope.dateTime = new Date(1993, 8, 25, 8, 30).getTime();
+            
+            //How fast a game second goes
             var timeRate = 50;
+            
+            //Used for timekeeping
             var endTime = 0;
+            
+            //Character working on a task i.e. travel, shopping or work
             $scope.working = false;
             $scope.workingShiftLength = 0;
 
-            $scope.money = 1000;
-            $scope.location = 0;
             
-            $scope.wages = 7.25;
-            $scope.biWeeklyAccumulation = 0;
             $scope.nextPayDate = $scope.dateTime + 14*24*60*60*1000;
             
             $scope.rent = 1000;
             $scope.rentDueDate = new Date(1993, 9, 6, 20, 0);
 
+            //Travel time to go Home
+            this.homeTravel = function(){
+                this.elapsedMinutes(30);
+                $scope.msgs.push("You have traveled for " + 30 + " minutes.");
+                this.changeLocation(0);
+            }
+            
+            //Travel timem to go to Work
+            this.workTravel = function(){
+                this.elapsedMinutes(30);
+                $scope.msgs.push("You have traveled for " + 30 + " minutes.");
+                this.changeLocation(1);
+            }
+            
+            //Time spent working
             this.workTime = function(hours) {
+                this.elapsedHours(hours);
+                $scope.workingShiftLength = hours;
+                $scope.msgs.push("You have worked for " + hours + " hours.");
+
+            };
+            
+            //Time spent sleeping and other actions
+            this.sleepTime = function(){
+                var currDate = new Date($scope.dateTime);
+                var timeSlept;
+                if(currDate.getHours() < 8){
+                    timeSlept = 8 - currDate.getHours();
+                }
+                else{
+                    timeSlept = 8 + (23 - currDate.getHours());
+                }
+                this.elapsedHours(timeSlept);
+                if(timeSlept > 6){
+                   $scope.msgs.push("You were able to get "+timeSlept+ " hours of sleep. Good Job!"); 
+                   $scope.health += 0.5
+                }
+                else{
+                   $scope.health -= 1;
+                   $scope.msgs.push("You only got " + timeSlept+ " hours of sleep. That is bad for your health");
+                }
+            }
+            
+            //method  to pass certain amount of hours
+            this.elapsedHours = function(hours){
                 var timeElapsed = hours * 60 * 60 * 1000;
                 endTime = $scope.dateTime + timeElapsed;
 
-                timeRate = 5000000;
                 $scope.workingShiftLength = hours;
 
-                $scope.working = true;
-                $scope.msgs.push("You have worked " + hours + " hours.");
 
-            };
+                $scope.working = true;
+                timeRate = 1000000;
+            }
+            
+             //method  to pass certain amount of minutes     
+             this.elapsedMinutes = function(minutes){
+                var timeElapsed = minutes * 60 * 1000;
+                endTime = $scope.dateTime + timeElapsed;
+                $scope.working = true;
+                timeRate = 100000;
+            }
 
             this.changeLocation = function(newLocation) {
                 $scope.location = newLocation;
