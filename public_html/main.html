@@ -31,7 +31,7 @@ and open the template in the editor.
 
             }
             .rightSide {
-                color:#362F2D;
+                color:#fff;
 
             }
             h1,
@@ -40,7 +40,7 @@ and open the template in the editor.
             h4,
             h5,
             h6{
-                color: #362F2D;
+                color: #fff;
             }
             h3{
                 margin-top : 0px;
@@ -48,8 +48,15 @@ and open the template in the editor.
             .testing{
                 display:none;
             }
+            
+            .btn-default.disabled, .btn-default[disabled], fieldset[disabled], .btn-default.disabled:hover{
+                color:#000;
+                background-color: #494F49;
+                border-color : #362F2D;
+            }
 
             .btn{
+                color:#fff;
                 background-color: #525f56;
                 border-color : #362F2D;
             }
@@ -89,18 +96,20 @@ and open the template in the editor.
                     <div class="col-md-4" ng-show="resource.isLocation(1)" ng-include="'./partials/work.html'"></div>
                     <div class="col-md-4" ng-show="resource.isLocation(0)" ng-include="'./partials/home.html'"></div>
                     <div class="col-md-4 rightSide">
+                        
                         <div id="childName" class="row">
                             Child's Name:
+
                         </div>
 
                         <div class="row">
                             Child's Age: {{childAge}}    
                         </div>
                         <div class='row'>
-                            Money : {{money| currency}}
+                            Money: {{money| currency}}
                         </div>
                         <div class='row'>
-                            Rent : {{rent| currency}} due on {{rentDueDate| date:'shortDate'}}
+                            Rent: {{rent| currency}} due on {{rentDueDate| date:'shortDate'}}
                         </div>
                         <div class='row'>
                             Next paycheck on {{nextPayDate| date:'shortDate'}}: {{biWeeklyAccumulation| currency}}
@@ -111,13 +120,17 @@ and open the template in the editor.
                         </div>
 
                         <div class="row">
-                            Stamina : {{stamina| staminaFilter}}
+                            Stamina: {{stamina| staminaFilter}}
                         </div>
                         <div class="row">
+<<<<<<< HEAD
                             Child's Emotional State : <img width="60%" ng-src="{{childRelationship|relationshipSmiley}}" />
+=======
+                            Child Emotional State: <img width="60%" ng-src="{{childRelationship|relationshipSmiley}}" />
+>>>>>>> colon
                         </div>
                         <div class="row testing">
-                            Child Hunger : {{childHunger}}
+                            Child Hunger: {{childHunger}}
                         </div>
                     </div>
                 </div>

@@ -463,7 +463,7 @@
             //for styling notifications
             this.messageStyle = function(divisor, type) {
                 var opLevel = "" + (4.0 / divisor);
-                var myColor = '#362F2D';
+                var myColor = '#ffffff';
                 if(type === 'alert'){
                     myColor = '#fb0909';
                 }
