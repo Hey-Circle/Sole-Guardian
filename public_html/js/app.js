@@ -25,10 +25,10 @@
             }
         };
     });
-    
+
     app.filter('pantryFilter', function() {
         return function(items) {
-            if(items > 0){
+            if (items > 0) {
                 return "Stocked";
             }
             else {
@@ -52,13 +52,13 @@
             $scope.childName = "Dawn";
             $scope.childAge = 5;
             $scope.childRelationship = 5;
-            $scope.childHunger = 3;
+            $scope.childHunger = 0;
             $scope.childHealth = 7;
             var playedWith = false;
-            
+
             //Groceries available to cook (1 is stocked, 0 is no stock)
             $scope.groceries = 0;
-            
+
             //Notifications
             $scope.msgs = [];
 
@@ -72,8 +72,10 @@
             var endTime = 0;
 
             //Character working on a task i.e. travel, shopping or work
+            //flag variables
             $scope.working = false;
             $scope.wentToWork = false;
+            $scope.awake = true;
             $scope.workingShiftLength = 0;
 
 
@@ -81,6 +83,12 @@
 
             $scope.rent = 1000;
             $scope.rentDueDate = new Date(1988, 9, 6, 20, 0);
+            var timeElapsed = 0;
+            var second = 1000;
+            var minute = 60 * second;
+            var hour = 60 * minute;
+
+
 
 
             //Play with child
@@ -107,7 +115,7 @@
                     $scope.childHealth -= .05;
                     $scope.money -= 10;
                     $scope.msgs.push("You just ate fast food with your child.");
-                    
+
                 }
                 if (minutes === 60) {
                     $scope.childHealth += .02;
@@ -130,20 +138,18 @@
                 $scope.stamina -= .5;
                 $scope.msgs.push("You just went shopping for groceries. Your pantry is stocked to make a meal");
             }
-            
+
             this.homeTravelFromFood = function() {
                 this.elapsedMinutes(10);
                 $scope.msgs.push("You have traveled for " + 10 + " minutes.");
                 this.changeLocation(0);
             }
-            
+
             //Travel time to go Home from work (pick up kid on the way)
-            this.homeTravel = function(){
+            this.homeTravel = function() {
                 var pickupTime = $scope.dateTime;
                 pickupTime = new Date(pickupTime);
                 var minDifference = ((pickupTime.getHours() * 60) + pickupTime.getMinutes()) - ((16 * 60) + 30);
-                console.log(minDifference);
-                console.log(pickupTime.getHours());
                 this.elapsedMinutes(30);
                 $scope.msgs.push("You have traveled for " + 30 + " minutes.");
                 if (minDifference <= 0) {
@@ -162,8 +168,11 @@
                 $scope.msgs.push("You have traveled for " + 30 + " minutes.");
                 this.changeLocation(1);
                 $scope.wentToWork = true;
+                
+                //Child eats breakfast at school
+                $scope.childHunger = 0;
             }
-            
+
             this.foodTravel = function() {
                 this.elapsedMinutes(10);
                 $scope.msgs.push("You have traveled for " + 10 + " minutes.");
@@ -181,6 +190,7 @@
 
             //Time spent sleeping and other actions
             this.sleepTime = function() {
+                $scope.awake = false;
                 var currDate = new Date($scope.dateTime);
                 var timeSlept;
                 if (currDate.getHours() < 8) {
@@ -204,6 +214,9 @@
                     $scope.childRelationship -= 0.3;
                 }
 
+                if ($scope.childHunger > 6){
+                    $scope.msgs.push("Your child went to sleep hungry today.")
+                }
                 playedWith = false;
                 $scope.wentToWork = false;
             }
@@ -267,6 +280,9 @@
                         $scope.rentDueDate = new Date(rentDueYear, rentDueMonth, 6, 20, 0).getTime();
                     }
                     if ($scope.working && endTime < $scope.dateTime) {
+                        if($scope.awake == false){
+                            $scope.awake = true;
+                        }
                         $scope.working = false;
                         if ($scope.workingShiftLength > 0) {
                             addToDueEarnings();
@@ -284,7 +300,7 @@
                     if (currDate.getHours() < 8) {
                         //Style for backgroud image
                         $scope.backgroundImageStyle = {
-                            background: 'url(images/dusk.jpg) no-repeat center center fixed '
+                            background: 'url(images/night.jpg) no-repeat center center fixed '
                         };
                     }
                     else if (currDate.getHours() < 16) {
@@ -296,9 +312,46 @@
                     else {
                         //Style for backgroud image
                         $scope.backgroundImageStyle = {
-                            background: 'url(images/night.jpg) no-repeat center center fixed '
+                            background: 'url(images/dusk.jpg) no-repeat center center fixed '
                         };
                     }
+
+                    //Track increases hunger per hour
+                    //Can be expanding to track anything per hour
+                    if (currDate.getHours() > 14 && $scope.awake) {
+                        console.log("Current Time past 2");
+                        console.log("Time Elapsed " + timeElapsed);
+                        console.log(hour);
+                        if (timeElapsed >= hour) {
+                            $scope.childHunger += 1;
+                            timeElapsed -= hour;
+                            if ($scope.chilHunger > 9) {
+                                $scope.msgs.push("Your child is suffering from starvation");
+                                $scope.childRelationship -= 2;
+                            }
+                            else if ($scope.childHunger > 6) {
+                                $scope.msgs.push("Your child is starving");
+                                $scope.childRelationship -= 0.7;
+                            }
+                            else if ($scope.childHunger > 3) {
+                                $scope.msgs.push("Your child is getting hungry");
+                            }
+                        }
+                        //Counter to keep track of time elapsed to be used
+                        //in hourly checking
+                        timeElapsed += timeRate;
+                    }
+                    
+                    //game-over checking
+                    if($scope.money < 0){
+                        /*  Game Over */
+                    }
+                    if($scope.childRelationship < 0){
+                        /*  Game Over */
+                    }
+
+
+
                 })
             }
 
