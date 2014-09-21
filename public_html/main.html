@@ -59,12 +59,16 @@ and open the template in the editor.
 
         </style>
         <script>
-                    $(document).ready(function () {
-            $('body.hidden').fadeIn(1000).removeClass('hidden');
-                    });        </script>
+            var child;
+            $(document).ready(function () {
+                $('body.hidden').fadeIn(1000).removeClass('hidden');
+                child = prompt("What is the name of your child?", "Name");
+                $('#childName').html("Child's Name: " + child);
+            });
+        </script>
     </head>
     <body class="hidden" id="outer" ng-controller="ResourceController as resource" ng-style="backgroundImageStyle" >
-       
+
         <div class="container-fluid"> 
             <div><img src="./images/logoish.png" style="width:40%; margin-top:15px"/></div>
             <div class="page-header">
@@ -85,8 +89,8 @@ and open the template in the editor.
                     <div class="col-md-4" ng-show="resource.isLocation(1)" ng-include="'./partials/work.html'"></div>
                     <div class="col-md-4" ng-show="resource.isLocation(0)" ng-include="'./partials/home.html'"></div>
                     <div class="col-md-4 rightSide">
-                        <div class="row">
-                            Child's Name : {{childName}}
+                        <div id="childName" class="row">
+                            Child's Name:
                         </div>
 
                         <div class="row">
@@ -110,7 +114,7 @@ and open the template in the editor.
                             Stamina : {{stamina| staminaFilter}}
                         </div>
                         <div class="row">
-                            Child Emotional State : <img width="60%" ng-src="{{childRelationship|relationshipSmiley}}" />
+                            Child's Emotional State : <img width="60%" ng-src="{{childRelationship|relationshipSmiley}}" />
                         </div>
                         <div class="row testing">
                             Child Hunger : {{childHunger}}
