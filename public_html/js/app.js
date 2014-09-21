@@ -9,6 +9,31 @@
         };
     });
 
+    app.filter('relationshipSmiley' , function() {
+        return function(items){
+            if (items < 1){
+                return "images/emoticons/sad.png"
+            }
+            else if(items <2){
+                return "images/emoticons/distant.png";
+            }
+            else if(items <3){
+                return "images/emoticons/annoyed.png";
+            }
+            else if(items <5){
+                return "images/emoticons/miffed.png";
+            }
+            else if(items <7){
+                return "images/emoticons/content.png";
+            }
+            else if(items <9){
+                return "images/emoticons/happy.png";
+            }
+            else{
+                return "images/emoticons/joyful.png";
+            }
+        }
+    });
     app.filter('staminaFilter', function() {
         return function(items) {
             if (items < 1) {

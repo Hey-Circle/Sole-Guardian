@@ -16,8 +16,8 @@ and open the template in the editor.
         <style>
             @font-face { 
                 font-family: 'Letter Gothic Std'; 
-                src: url('font/path/letter_gothic_std.eot'); 
-                src: url('font/path/letter_gothic_std.eot?#iefix') format('embedded-opentype'), url('font/path/letter_gothic_std.svg#Letter Gothic Std') format('svg'), url('font/path/letter_gothic_std.woff') format('woff'), url('font/path/letter_gothic_std.ttf') format('truetype'); 
+                src: url('font/letter_gothic_std.eot'); 
+                src: url('font/letter_gothic_std.eot?#iefix') format('embedded-opentype'), url('font/letter_gothic_std.svg#Letter Gothic Std') format('svg'), url('font/letter_gothic_std.woff') format('woff'), url('font/letter_gothic_std.ttf') format('truetype'); 
                 font-weight: normal; 
                 font-style: normal;
             }
@@ -110,8 +110,8 @@ and open the template in the editor.
                         <div class="row">
                             Stamina : {{stamina| staminaFilter}}
                         </div>
-                        <div class="row testing">
-                            Child Relationship : {{childRelationship}}
+                        <div class="row">
+                            Child Emotional State : <img width="60%" ng-src="{{childRelationship|relationshipSmiley}}" />
                         </div>
                         <div class="row testing">
                             Child Hunger : {{childHunger}}
