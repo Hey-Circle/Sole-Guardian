@@ -1,7 +1,7 @@
 <h4>Location: Food Court</h4>
 <div class="btn-group-vertical center-block">
     <button type="button" class="btn btn-default" ng-disabled="working || stamina < 0" ng-click="resource.eatTime(10)">Fast Food</button>
-    <button type="button" class="btn btn-default" ng-disabled="working || stamina < 0" ng-click="resource.shopTime(30)">Supermarket</button>
+    <button type="button" class="btn btn-default" ng-disabled="working || stamina < 0 || groceries > 0" ng-click="resource.shopTime(30)">Supermarket</button>
     <button type="button" class="btn btn-default" ng-disabled="working || stamina < 0" ng-click="resource.eatTime(90)">Restaurant</button>
     <button type="button" class="btn btn-default" ng-disabled="working" ng-click="resource.homeTravelFromFood()">Go Home</button>
 </div>
