@@ -1,5 +1,5 @@
 <h4>Location: Home</h4>
 <div class="btn-group-vertical center-block">    
-    <button type="button" class="btn btn-default">Go To Sleep</button>
-    <button type="button" class="btn btn-default" ng-click="resource.changeLocation(1)">Go To Work</button>
+    <button type="button" class="btn btn-default" ng-disabled="working" ng-click="resource.sleepTime()">Go To Sleep</button>
+    <button type="button" class="btn btn-default" ng-disabled="working" ng-click="resource.workTravel()">Go To Work</button>
 </div>
