@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html ng-app="soleGuardian">
+    <head>
+        <link rel="stylesheet" type="text/css" href="libs/Bootstrap/css/bootstrap.min.css" />
+        <script type="text/javascript" src="libs/AngularJS/angular.min.js"></script>
+        <script type="text/javascript" src="js/app.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <title>Sole Guardian</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            body{
+                -webkit-backface-visibility: hidden;
+                -moz-backface-visibility:    hidden;
+                -ms-backface-visibility:     hidden;
+                -webkit-background-size: cover;
+                -moz-background-size: cover;
+                -o-background-size: cover;
+                background-size: cover;
+                font-size:16px;
+
+            }
+            .rightSide {
+                -webkit-text-fill-color: white; /* Will override color (regardless of order) */
+                -webkit-text-stroke-width: 0.1px;
+                -webkit-text-stroke-color: black;
+            }
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6{
+                -webkit-text-fill-color: white; /* Will override color (regardless of order) */
+                -webkit-text-stroke-width: 0.1px;
+                -webkit-text-stroke-color: black;
+            }
+
+        </style>
+            <script>
+        $(document).ready(function () {
+    $('body.hidden').fadeIn(1000).removeClass('hidden');
+});
+</script>
+    </head>
+    <body class="hidden" id="outer" ng-controller="ResourceController as resource" ng-style="backgroundImageStyle" >
+
+        <div class="container" ng-cloak="" >
+            <div class="page-header">
+                <h1>
+                    Sole Guardian
+                </h1>
+                <h3>
+                    {{dateTime| date:'medium'}}
+                </h3>
+            </div>
+            <div class="row">
+                <div class="col-md-4 leftSide">
+                    <div class="row" ng-repeat="msg in msgs| reverse track by $index">
+                        <div ng-style="resource.messageStyle($index,msg.type)" class="col-md-12">
+                            {{msg.message}}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4" ng-show="resource.isLocation(2)" ng-include="'./partials/eat.html'"></div>
+                <div class="col-md-4" ng-show="resource.isLocation(1)" ng-include="'./partials/work.html'"></div>
+                <div class="col-md-4" ng-show="resource.isLocation(0)" ng-include="'./partials/home.html'"></div>
+                <div class="col-md-4 rightSide">
+                    <div class="row">
+                        Child's Name : {{childName}}
+                    </div>
+
+                    <div class="row">
+                        Child's Age: {{childAge}}    
+                    </div>
+                    <div class='row'>
+                        Money : {{money| currency}}
+                    </div>
+                    <div class='row'>
+                        Rent : {{rent| currency}} due on {{rentDueDate| date:'shortDate'}}
+                    </div>
+                    <div class='row'>
+                        Next paycheck on {{nextPayDate| date:'shortDate'}}: {{biWeeklyAccumulation| currency}}
+                    </div>
+
+                    <div class="row">
+                        Pantry: {{groceries| pantryFilter}}
+                    </div>
+
+                    <div class="row">
+                        Stamina : {{stamina| staminaFilter}}
+                    </div>
+                    <div class="row testing">
+                        Child Relationship : {{childRelationship}}
+                    </div>
+                    <div class="row testing">
+                        Child Hunger : {{childHunger}}
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </body>
+</html>
