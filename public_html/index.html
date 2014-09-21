@@ -34,7 +34,12 @@ and open the template in the editor.
                 <div class="col-md-4" ng-show="resource.isLocation(1)" ng-include="'./partials/work.html'"></div>
                 <div class="col-md-4" ng-show="resource.isLocation(0)" ng-include="'./partials/home.html'"></div>
                 <div class="col-md-4">
-                    Money : {{money| currency}}
+                    <div class='row'>
+                        Money : {{money | currency}}
+                    </div>
+                    <div class='row'>
+                        Rent : {{1000 | currency}}
+                    </div>
                 </div>
 
             </div>
