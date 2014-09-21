@@ -127,7 +127,6 @@
                     }
                     //check if you reach rent paytime
                     if($scope.dateTime >= $scope.rentDueDate) {
-                        alert("rent due");
                         $scope.money -= $scope.rent;
                         $scope.msgs.push("You just paid your rent for this month.");
                         //set new rent due date
