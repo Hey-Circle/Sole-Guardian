@@ -1,10 +1,18 @@
 (function() {
 
     var app = angular.module('soleGuardian', []);
+    app.filter('reverse', function() {
+        return function(items) {
+            return items.slice().reverse();
+        };
+    });
     app.controller('ResourceController', ['$scope', function($scope) {
             $scope.salary = 1000;
-            
-            $scope.dateTime = new Date(1993, 8,25, 8,30).getTime();
+            $scope.msgs = [];
+
+
+
+            $scope.dateTime = new Date(1993, 8, 25, 8, 30).getTime();
             var timeRate = 50;
             var endTime = 0;
             $scope.working = false;
@@ -13,37 +21,49 @@
             $scope.location = 0;
 
 
-            this.workTime = function(timeElapsed) {
+            this.workTime = function(hours) {
+                var timeElapsed = hours * 60 * 60 * 1000;
                 endTime = $scope.dateTime + timeElapsed;
-                timeRate = 100000;
+                timeRate = 300000;
                 $scope.working = true;
-                
+                $scope.msgs.push("You have worked " + hours + " hours.");
+
             };
-            
+
             this.changeLocation = function(newLocation) {
                 $scope.location = newLocation;
             }
-            
+
             this.isLocation = function(testLocation) {
                 return testLocation === $scope.location;
             }
 
+            /*
+             * Methid that keeps track of time the game
+             * and runs the engine
+             */
             function step() {
                 $scope.$apply(function() {
-                    if($scope.working && endTime < $scope.dateTime){
-                        $scope.working  = false;
+                    if ($scope.working && endTime < $scope.dateTime) {
+                        $scope.working = false;
                         timeRate = 50;
                     }
                     $scope.dateTime += timeRate;
-
+                    if ($scope.msgs.length > 14) {
+                        $scope.msgs.shift()
+                    }
                 })
             }
 
             var timer = setInterval(step, 20);
-            
+
+            this.setOpacity = function(divisor){
+                var opLevel = "" + (4.0/divisor);
+                return {opacity : opLevel};
+            }
             
         }]);
-    
-    
+
+
 })();
 
