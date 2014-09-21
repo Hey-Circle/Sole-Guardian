@@ -40,6 +40,9 @@ and open the template in the editor.
                     <div class='row'>
                         Rent : {{1000 | currency}}
                     </div>
+                    <div class='row'>
+                        Money Due on {{nextPayDate | date:'shortDate'}}: {{biWeeklyAccumulation | currency}}
+                    </div>
                 </div>
 
             </div>

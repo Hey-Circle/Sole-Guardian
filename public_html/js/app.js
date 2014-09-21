@@ -22,6 +22,8 @@
             $scope.location = 0;
             
             $scope.wages = 7.25;
+            $scope.biWeeklyAccumulation = 0;
+            $scope.nextPayDate = $scope.dateTime + 14*24*60*60*1000;
 
 
             this.workTime = function(hours) {
@@ -44,11 +46,11 @@
                 return testLocation === $scope.location;
             }
             
-            var payForWork = function() {
+            var addToDueEarnings = function() {
                 if($scope.workingShiftLength <= 8) {
-                    $scope.money = $scope.money + $scope.workingShiftLength*$scope.wages;
+                    $scope.biWeeklyAccumulation = $scope.biWeeklyAccumulation + $scope.workingShiftLength*$scope.wages;
                 } else {
-                    $scope.money = $scope.money + 8*$scope.wages + 4*$scope.wages*1.5;
+                    $scope.biWeeklyAccumulation = $scope.biWeeklyAccumulation + 8*$scope.wages + 4*$scope.wages*1.5;
                 }
             };
 
@@ -58,10 +60,14 @@
              */
             function step() {
                 $scope.$apply(function() {
-
+                    if($scope.dateTime >= $scope.nextPayDate) {
+                        $scope.money += $scope.biWeeklyAccumulation;
+                        $scope.biWeeklyAccumulation = 0;
+                        $scope.nextPayDate += 14*24*60*60*1000;
+                    }
                     if($scope.working && endTime < $scope.dateTime){
                         $scope.working  = false;
-                        payForWork();
+                        addToDueEarnings();
                         timeRate = 50;
                     }
                     $scope.dateTime += timeRate;
