@@ -10,8 +10,6 @@
             $scope.salary = 1000;
             $scope.msgs = [];
 
-
-
             $scope.dateTime = new Date(1993, 8, 25, 8, 30).getTime();
             var timeRate = 50;
             var endTime = 0;
@@ -30,7 +28,7 @@
                 var timeElapsed = hours * 60 * 60 * 1000;
                 endTime = $scope.dateTime + timeElapsed;
 
-                timeRate = 300000;
+                timeRate = 3000000;
                 $scope.workingShiftLength = hours;
 
                 $scope.working = true;
@@ -61,7 +59,8 @@
             function step() {
                 $scope.$apply(function() {
                     if($scope.dateTime >= $scope.nextPayDate) {
-                        $scope.money += $scope.biWeeklyAccumulation;
+                        $scope.money += $scope.biWeeklyAccumulation;                        
+                        $scope.msgs.push("You have been paid $" + $scope.biWeeklyAccumulation);
                         $scope.biWeeklyAccumulation = 0;
                         $scope.nextPayDate += 14*24*60*60*1000;
                     }
