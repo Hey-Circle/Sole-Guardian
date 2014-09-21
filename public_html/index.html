@@ -12,9 +12,16 @@ and open the template in the editor.
         <title>Sole Guardian</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            body{
+                -webkit-backface-visibility: hidden;
+                -moz-backface-visibility:    hidden;
+                -ms-backface-visibility:     hidden;
+            }
+        </style>
     </head>
-    <body id="outer" ng-controller="ResourceController as resource">
-        <div class="container">
+    <body id="outer" ng-controller="ResourceController as resource" ng-style="backgroundImageStyle" >
+        <div class="container" >
             <div class="page-header">
                 <h1>
                     Sole Guardian
@@ -25,7 +32,7 @@ and open the template in the editor.
             </div>
             <div class="row">
                 <div class="col-md-4">
-                    <div class="row" ng-repeat="msg in msgs | reverse track by $index">
+                    <div class="row" ng-repeat="msg in msgs| reverse track by $index">
                         <div ng-style="resource.setOpacity($index)" class="col-md-12">
                             {{msg}}
                         </div>
@@ -43,20 +50,21 @@ and open the template in the editor.
                         Child's Age: {{childAge}}    
                     </div>
                     <div class='row'>
-                        Money : {{money | currency}}
+                        Money : {{money| currency}}
                     </div>
                     <div class='row'>
-                        Rent : {{1000 | currency}} charged automatically on {{rentDueDate | date:'shortDate'}}
+                        Rent : {{1000| currency}} charged automatically on {{rentDueDate| date:'shortDate'}}
                     </div>
                     <div class='row'>
-                        Next paycheck on {{nextPayDate | date:'shortDate'}}: {{biWeeklyAccumulation | currency}}
+                        Next paycheck on {{nextPayDate| date:'shortDate'}}: {{biWeeklyAccumulation| currency}}
                     </div>
+
                     <div class="row">
                         Pantry: {{groceries | pantryFilter}}
                     </div>
-                    
+
                     <div class="row">
-                        Stamina : {{stamina | staminaFilter}}
+                        Stamina : {{stamina| staminaFilter}}
                     </div>
                     <div class="row testing">
                         Child Relationship : {{childRelationship}}
