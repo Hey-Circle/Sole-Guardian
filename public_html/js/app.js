@@ -90,7 +90,7 @@
             $scope.msgs = [];
 
             //September 25, 1993
-            $scope.dateTime = new Date(1988, 8, 25, 8, 00).getTime();
+            $scope.dateTime = new Date(1988, 8, 15, 8, 00).getTime();
 
             //How fast a game second goes
             var timeRate = 50;
