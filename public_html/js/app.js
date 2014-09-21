@@ -71,11 +71,12 @@
             //Used for timekeeping
             var endTime = 0;
 
-            //Character working on a task i.e. travel, shopping or work
-            //flag variables
+   //Character working on a task i.e. travel, shopping, work, sleeping
+   //flag variables
             $scope.working = false;
+            //Character is sleeping
+            $scope.sleeping = false;
             $scope.wentToWork = false;
-            $scope.awake = true;
             $scope.workingShiftLength = 0;
 
 
@@ -83,12 +84,14 @@
 
             $scope.rent = 1000;
             $scope.rentDueDate = new Date(1988, 9, 6, 20, 0);
+            
             var timeElapsed = 0;
             var second = 1000;
             var minute = 60 * second;
             var hour = 60 * minute;
 
-
+            //Keeps track of time character went to sleep.
+            $scope.bedTime = 0;
 
 
             //Play with child
@@ -190,25 +193,18 @@
 
             //Time spent sleeping and other actions
             this.sleepTime = function() {
-                $scope.awake = false;
-                var currDate = new Date($scope.dateTime);
-                var timeSlept;
-                if (currDate.getHours() < 8) {
-                    timeSlept = 8 - currDate.getHours();
-                }
-                else {
-                    timeSlept = 8 + (23 - currDate.getHours());
-                }
-                this.elapsedHours(timeSlept);
-                if (timeSlept > 6) {
-                    $scope.msgs.push("You were able to get " + timeSlept + " hours of sleep. Good Job!");
-                    $scope.stamina = 10;
-                }
-                else {
-                    $scope.msgs.push("You only got " + timeSlept + " hours of sleep. That is bad for your health");
-                    $scope.stamina = timeSlept;
-                }
+                $scope.sleeping = true;
+                $scope.bedTime = $scope.dateTime;
 
+                var currDate = new Date($scope.dateTime);
+                var timePlannedToSleep;
+                if (currDate.getHours() < 8) {
+                    timePlannedToSleep = 8 - currDate.getHours();
+                }
+                else {
+                    timePlannedToSleep = 8 + (23 - currDate.getHours());
+                }
+                this.elapsedHours(timePlannedToSleep);
                 //Work around for testing relationship
                 if (playedWith == false) {
                     $scope.childRelationship -= 0.3;
@@ -253,13 +249,41 @@
                     $scope.biWeeklyAccumulation = $scope.biWeeklyAccumulation + 8 * $scope.wages + 4 * $scope.wages * 1.5;
                 }
             };
+            
+            //controls waking up
+            $scope.wakeUp = function() {
+                var timeSlept = Math.round((new Date($scope.dateTime).getTime() - $scope.bedTime)/(1000*60*60));
+                $scope.msgs.push("You slept " + timeSlept + " hours.");
+                if (timeSlept > 6) {
+                    $scope.stamina = 10;
+                }
+                else {
+                    $scope.stamina += timeSlept/2;
+                    if($scope.stamina > 10) {
+                        $scope.stamina = 10;
+                    }
+                }
 
+                $scope.sleeping = false;
+            };
             /*
              * Methid that keeps track of time the game
              * and runs the engine
              */
             function step() {
                 $scope.$apply(function() {
+                    // 1% chance of child waking you
+                    var rand = Math.floor((Math.random() * $scope.childRelationship*50) + 1);
+                    if (rand === 1) {
+                        if($scope.sleeping) {
+                            if($scope.childRelationship < 4.5) {
+                                $scope.msgs.push("Your child is lonely and woke you for comfort.");
+                                $scope.wakeUp();
+                                $scope.working = false;
+                                timeRate = 50;
+                            }
+                        }
+                    }
                     //check if you reach payday
                     if ($scope.dateTime >= $scope.nextPayDate) {
                         $scope.money += $scope.biWeeklyAccumulation;
@@ -280,13 +304,14 @@
                         $scope.rentDueDate = new Date(rentDueYear, rentDueMonth, 6, 20, 0).getTime();
                     }
                     if ($scope.working && endTime < $scope.dateTime) {
-                        if($scope.awake == false){
-                            $scope.awake = true;
-                        }
                         $scope.working = false;
                         if ($scope.workingShiftLength > 0) {
                             addToDueEarnings();
                             $scope.workingShiftLength = 0;
+                        }
+                        if ($scope.sleeping) {
+                            
+                            $scope.wakeUp();
                         }
                         timeRate = 50;
                     }
@@ -318,7 +343,7 @@
 
                     //Track increases hunger per hour
                     //Can be expanding to track anything per hour
-                    if (currDate.getHours() > 14 && $scope.awake) {
+                    if (currDate.getHours() > 14 && !$scope.sleeping) {
                         console.log("Current Time past 2");
                         console.log("Time Elapsed " + timeElapsed);
                         console.log(hour);
