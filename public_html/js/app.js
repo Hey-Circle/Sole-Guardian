@@ -1,25 +1,55 @@
 (function() {
 
     var app = angular.module('soleGuardian', []);
+    
+    //Filter to reverse an array
     app.filter('reverse', function() {
         return function(items) {
             return items.slice().reverse();
         };
     });
+    
+    app.filter('staminaFilter', function(){
+        return function(items) {
+            if(items < 1){
+                return "Exhausted";
+            }
+            else if(items < 4){
+                return "Tired";
+            }
+            else if(items < 7){
+                return "Content";
+            }
+            else{
+                return "Energetic";
+            } 
+        };
+    });
+    
     app.controller('ResourceController', ['$scope', function($scope) {
             //Player Stats
             $scope.salary = 1000;
             $scope.money = 1000;
-            $scope.health = 0;
+            $scope.stamina = 10;
+            $scope.health = 8;
             $scope.location = 0;
             $scope.wages = 7.25;
             $scope.biWeeklyAccumulation = 0;
+            
+            //Child Stats
+            $scope.childName = "Dawn";
+            $scope.childAge = 5;
+            $scope.childRelationship = 5;
+            $scope.childHunger = 3;
+            $scope.childHeatlh = 7;
+            var playedWith = false;
+            
             
             //Notifications
             $scope.msgs = [];
 
             //September 25, 1993
-            $scope.dateTime = new Date(1993, 8, 25, 8, 30).getTime();
+            $scope.dateTime = new Date(1988, 8, 25, 8, 00).getTime();
             
             //How fast a game second goes
             var timeRate = 50;
@@ -37,10 +67,40 @@
             $scope.rent = 1000;
             $scope.rentDueDate = new Date(1993, 9, 6, 20, 0);
 
+
+            //Play with child
+            this.playWithChild = function(){
+                this.elapsedHours(1);
+                if($scope.childRelationship >= 5){
+                    $scope.msgs.push("You played with your child for an hour. She seems more happy and content");
+                }
+                else if($scope.childRelationship < 5){
+                    $scope.msgs.push("You played with your child for an hour. She seems less detached");
+                }
+                
+                
+                $scope.childRelationship += 0.2;
+                $scope.stamina -= 1;
+                playedWithed = true;
+            }
+            
             //Travel time to go Home
             this.homeTravel = function(){
+                var pickupTime = $scope.dateTime;
+                pickupTime = new Date(pickupTime);
+                var minDifference = ((pickupTime.getHours() * 60) + pickupTime.getMinutes()) - ((16 * 60) + 30);
+                console.log(minDifference);
+                console.log(pickupTime.getHours());
+                if(minDifference <= 0){
+                    $scope.msgs.push("You picked your child on time.");
+                }
+                else{
+                    $scope.msgs.push("You were " +minDifference+ " minutes late to pick up your child.");
+                    $scope.childRelationship -= ((minDifference/60) * .1);
+                }
                 this.elapsedMinutes(30);
                 $scope.msgs.push("You have traveled for " + 30 + " minutes.");
+                
                 this.changeLocation(0);
             }
             
@@ -54,6 +114,7 @@
             //Time spent working
             this.workTime = function(hours) {
                 this.elapsedHours(hours);
+                $scope.stamina = $scope.stamina - (hours*.8);
                 $scope.workingShiftLength = hours;
                 $scope.msgs.push("You have worked for " + hours + " hours.");
 
@@ -72,12 +133,20 @@
                 this.elapsedHours(timeSlept);
                 if(timeSlept > 6){
                    $scope.msgs.push("You were able to get "+timeSlept+ " hours of sleep. Good Job!"); 
-                   $scope.health += 0.5
+                   $scope.stamina = 10;
                 }
                 else{
-                   $scope.health -= 1;
                    $scope.msgs.push("You only got " + timeSlept+ " hours of sleep. That is bad for your health");
+                   $scope.stamina = timeSlept;
                 }
+                
+                //Work around for testing relationship
+                if(playedWith == false){
+                    $scope.childRelationship -= 0.3;
+                }
+                
+                playedWith = false;
+                
             }
             
             //method  to pass certain amount of hours
@@ -96,6 +165,7 @@
                 timeRate = 100000;
             }
 
+            //Used to go to a different room
             this.changeLocation = function(newLocation) {
                 $scope.location = newLocation;
             }
@@ -118,6 +188,8 @@
              */
             function step() {
                 $scope.$apply(function() {
+                    
+                    
                     //check if you reach payday
                     if($scope.dateTime >= $scope.nextPayDate) {
                         $scope.money += $scope.biWeeklyAccumulation;                        

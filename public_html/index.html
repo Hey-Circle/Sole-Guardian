@@ -34,6 +34,13 @@ and open the template in the editor.
                 <div class="col-md-4" ng-show="resource.isLocation(1)" ng-include="'./partials/work.html'"></div>
                 <div class="col-md-4" ng-show="resource.isLocation(0)" ng-include="'./partials/home.html'"></div>
                 <div class="col-md-4">
+                    <div class="row">
+                        Child's Name : {{childName}}
+                    </div>
+
+                    <div class="row">
+                        Child's Age: {{childAge}}    
+                    </div>
                     <div class='row'>
                         Money : {{money | currency}}
                     </div>
@@ -43,6 +50,14 @@ and open the template in the editor.
                     <div class='row'>
                         Next paycheck on {{nextPayDate | date:'shortDate'}}: {{biWeeklyAccumulation | currency}}
                     </div>
+                    
+                    <div class="row">
+                        Stamina : {{stamina | staminaFilter}}
+                    </div>
+                    <div class="row testing">
+                        Child Relationship : {{childRelationship}}
+                    </div>
+
                 </div>
 
             </div>
