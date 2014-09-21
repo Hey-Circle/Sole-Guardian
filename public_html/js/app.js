@@ -125,11 +125,11 @@
             this.playWithChild = function() {
                 this.elapsedHours(1);
                 if ($scope.childRelationship >= 5) {
-                    var msg = {message:"You played with your child for an hour. She seems more happy and content", type:"notification"};
+                    var msg = {message:"You played with your child for an hour. Your child seems happier and more content", type:"notification"};
                     $scope.msgs.push(msg);
                 }
                 else if ($scope.childRelationship < 5) {
-                    var msg = {message:"You played with your child for an hour. She seems less detached", type:"notification"};
+                    var msg = {message:"You played with your child for an hour. Your child seems less detached", type:"notification"};
                     $scope.msgs.push(msg);
                 }
 
@@ -452,7 +452,7 @@
                     }
                     if($scope.childRelationship < 0){
                         clearInterval(timer);
-                        if(!alert('Game Over! Your child was removed by protective services for parent negligence. Press OK to restart.')){window.location.reload();}
+                        if(!alert('Game Over! Your child was removed by protective services for parental negligence. Press OK to restart.')){window.location.reload();}
                     }
 
                 });
