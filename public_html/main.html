@@ -70,6 +70,9 @@ and open the template in the editor.
             $(document).ready(function () {
                 $('body.hidden').fadeIn(1000).removeClass('hidden');
                 child = prompt("What is the name of your child?", "Name");
+                while (child === null || child.length === 0) {
+                    child = prompt("What is the name of your child?", "Name");
+                }
                 $('#childName').html("Child's Name: " + child);
             });
         </script>
@@ -123,11 +126,7 @@ and open the template in the editor.
                             Stamina: {{stamina| staminaFilter}}
                         </div>
                         <div class="row">
-<<<<<<< HEAD
                             Child's Emotional State : <img width="60%" ng-src="{{childRelationship|relationshipSmiley}}" />
-=======
-                            Child Emotional State: <img width="60%" ng-src="{{childRelationship|relationshipSmiley}}" />
->>>>>>> colon
                         </div>
                         <div class="row testing">
                             Child Hunger: {{childHunger}}
