@@ -1,8 +1,8 @@
 <h4>Location: Work</h4>
 <h5>Hourly Wage: {{wages | currency}}</h5>
 <div class="btn-group-vertical center-block">
-    <button type="button" class="btn btn-default" ng-disabled="working" ng-click="resource.workTime(4)">1 Shift (4 hours)</button>
-    <button type="button" class="btn btn-default" ng-disabled="working" ng-click="resource.workTime(8)">2 Shifts (8 hours)</button>
-    <button type="button" class="btn btn-default" ng-disabled="working" ng-click="resource.workTime(12)">3 Shifts (12 hours)</button>
+    <button type="button" class="btn btn-default" ng-disabled="working || stamina < 0" ng-click="resource.workTime(4)">1 Shift (4 hours)</button>
+    <button type="button" class="btn btn-default" ng-disabled="working || stamina < 0" ng-click="resource.workTime(8)">2 Shifts (8 hours)</button>
+    <button type="button" class="btn btn-default" ng-disabled="working || stamina < 0" ng-click="resource.workTime(12)">3 Shifts (12 hours)</button>
     <button type="button" class="btn btn-default" ng-disabled="working" ng-click="resource.homeTravel()">Go Home</button>
 </div>

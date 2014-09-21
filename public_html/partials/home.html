@@ -1,5 +1,8 @@
-<h4>Location: Home</h4>
+<h3>Location: Home</h3>
 <div class="btn-group-vertical center-block">    
     <button type="button" class="btn btn-default" ng-disabled="working" ng-click="resource.sleepTime()">Go To Sleep</button>
+    <button type="button" class="btn btn-default" ng-disabled="working || stamina < 0" ng-click="resource.playWithChild()">Play With Child</button> 
+    <br />
+    <h4>Travel</h4>
     <button type="button" class="btn btn-default" ng-disabled="working" ng-click="resource.workTravel()">Go To Work</button>
 </div>
