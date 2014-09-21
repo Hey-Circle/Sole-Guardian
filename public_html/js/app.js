@@ -422,11 +422,12 @@
                     }
                     //game-over checking
                     if($scope.money < 0){
+                        clearInterval(timer);
                         if(!alert('Game Over! You have no money left. Press OK to restart.')){window.location.reload();}
                     }
                     if($scope.childRelationship < 0){
+                        clearInterval(timer);
                         if(!alert('Game Over! Your child was removed by protective services for parent negligence. Press OK to restart.')){window.location.reload();}
-
                     }
 
                 });
